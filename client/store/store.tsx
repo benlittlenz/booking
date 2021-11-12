@@ -10,17 +10,17 @@ const initState = {};
 
 // Combine all partial reducers.
 const rootReducer = combineReducers({
-    auth,
-    // Add your stores here.
+  auth,
+  // Add your stores here.
 });
 
 const middleware = [thunk];
 
 // Create reduc store of all existing stores. Also init devtools.
 const store = createStore(
-    rootReducer,
-    initState,
-    composeWithDevTools(applyMiddleware(...middleware))
+  rootReducer,
+  initState,
+  composeWithDevTools(applyMiddleware(...middleware)),
 );
 
 export default store;

@@ -21,38 +21,38 @@ import * as types from "../actionTypes";
  * an active user.
  */
 export const loadUser = () => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.get("/api/user");
+  return async (dispatch: CallableFunction) => {
+    try {
+      await axios.get("/sanctum/csrf-cookie");
+      const res = await axios.get("/api/user");
 
-            // User was loaded successfully.
-            if (res.status === 200) {
-                dispatch({ type: types.USER_LOADED, payload: res.data });
-                return res.data;
-            }
-        } catch (error) {
-            if (error.response.status === 422) {
-                return dispatch({
-                    type: types.USER_LOADED_ERROR,
-                    payload: "Email or password are incorrect.",
-                });
-            }
-            if (error.response.status === 419) {
-                return dispatch({
-                    type: types.AUTHENTICATION_ERROR,
-                    payload: {
-                        errorMsg: "Keinen Serverzugang.",
-                    },
-                });
-            } else {
-                return dispatch({
-                    type: types.USER_LOADED_ERROR,
-                    payload: "Sorry, something went wrong.",
-                });
-            }
-        }
-    };
+      // User was loaded successfully.
+      if (res.status === 200) {
+        dispatch({ type: types.USER_LOADED, payload: res.data });
+        return res.data;
+      }
+    } catch (error) {
+      if (error.response.status === 422) {
+        return dispatch({
+          type: types.USER_LOADED_ERROR,
+          payload: "Email or password are incorrect.",
+        });
+      }
+      if (error.response.status === 419) {
+        return dispatch({
+          type: types.AUTHENTICATION_ERROR,
+          payload: {
+            errorMsg: "Keinen Serverzugang.",
+          },
+        });
+      } else {
+        return dispatch({
+          type: types.USER_LOADED_ERROR,
+          payload: "Sorry, something went wrong.",
+        });
+      }
+    }
+  };
 };
 
 /**
@@ -64,45 +64,45 @@ export const loadUser = () => {
  *   The password of the user.
  */
 export const login = (email: string, password: string): any => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            // Start loading.
-            dispatch({ type: types.START_LOGIN_LOADING });
+  return async (dispatch: CallableFunction) => {
+    try {
+      // Start loading.
+      dispatch({ type: types.START_LOGIN_LOADING });
 
-            // Make api requests.
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/login", {
-                email,
-                password,
-            });
+      // Make api requests.
+      await axios.get("/sanctum/csrf-cookie");
+      const res = await axios.post("/login", {
+        email,
+        password,
+      });
 
-            // Authentication was successful.
-            if (res.status === 204) {
-                dispatch(loadUser());
-                dispatch({
-                    type: types.LOGIN_SUCCESS,
-                });
-            }
-        } catch (error: any) {
-            if (error.response && error.response.status === 422) {
-                return dispatch({
-                    type: types.LOGIN_ERROR,
-                    payload: "Email or password are incorrect.",
-                });
-            }
-            if (error.response && error.response.status === 419) {
-                return dispatch({
-                    type: types.LOGIN_ERROR,
-                    payload: "Application access denied.",
-                });
-            } else {
-                return dispatch({
-                    type: types.AUTHENTICATION_ERROR,
-                    payload: "Sorry, somethig went wrong.",
-                });
-            }
-        }
-    };
+      // Authentication was successful.
+      if (res.status === 204) {
+        dispatch(loadUser());
+        dispatch({
+          type: types.LOGIN_SUCCESS,
+        });
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 422) {
+        return dispatch({
+          type: types.LOGIN_ERROR,
+          payload: "Email or password are incorrect.",
+        });
+      }
+      if (error.response && error.response.status === 419) {
+        return dispatch({
+          type: types.LOGIN_ERROR,
+          payload: "Application access denied.",
+        });
+      } else {
+        return dispatch({
+          type: types.AUTHENTICATION_ERROR,
+          payload: "Sorry, somethig went wrong.",
+        });
+      }
+    }
+  };
 };
 
 /**
@@ -118,65 +118,65 @@ export const login = (email: string, password: string): any => {
  *   The confirmed password of the user.
  */
 export const register = (
-    name: string,
-    email: string,
-    password: string,
-    password_confirmed: string
+  name: string,
+  email: string,
+  password: string,
+  password_confirmed: string,
 ) => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            dispatch({
-                type: types.START_REGISTER_LOADING,
-            });
-            // API Call.
-            await axios.get("/sanctum/csrf-cookie");
-            const res = await axios.post("/register", {
-                name,
-                email,
-                password,
-                password_confirmed,
-            });
+  return async (dispatch: CallableFunction) => {
+    try {
+      dispatch({
+        type: types.START_REGISTER_LOADING,
+      });
+      // API Call.
+      await axios.get("/sanctum/csrf-cookie");
+      const res = await axios.post("/register", {
+        name,
+        email,
+        password,
+        password_confirmed,
+      });
 
-            // Load the user if registration was successful.
-            if (res.status === 201) {
-                dispatch(loadUser());
-            }
-        } catch (error: any) {
-            if (error.response && error.response.status === 422) {
-                const emailErrorMsg = error.response.data.errors.email[0];
+      // Load the user if registration was successful.
+      if (res.status === 201) {
+        dispatch(loadUser());
+      }
+    } catch (error: any) {
+      if (error.response && error.response.status === 422) {
+        const emailErrorMsg = error.response.data.errors.email[0];
 
-                if (emailErrorMsg) {
-                    dispatch({
-                        type: types.REGISTER_ERROR,
-                        payload: emailErrorMsg,
-                    });
-                }
-            } else {
-                dispatch({
-                    type: types.REGISTER_ERROR,
-                    payload: "Sorry, something went wrong.",
-                });
-            }
+        if (emailErrorMsg) {
+          dispatch({
+            type: types.REGISTER_ERROR,
+            payload: emailErrorMsg,
+          });
         }
-    };
+      } else {
+        dispatch({
+          type: types.REGISTER_ERROR,
+          payload: "Sorry, something went wrong.",
+        });
+      }
+    }
+  };
 };
 
 /**
  * Log current user out.
  */
 export const logout = () => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            const res = await axios.post("/logout");
-            if (res.status === 204) {
-                dispatch({
-                    type: types.LOGOUT,
-                });
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  return async (dispatch: CallableFunction) => {
+    try {
+      const res = await axios.post("/logout");
+      if (res.status === 204) {
+        dispatch({
+          type: types.LOGOUT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 };
 
 /**
@@ -192,30 +192,30 @@ export const logout = () => {
  *   Error and success message.
  */
 export const forgotPassword = (email: string) => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            const res = await axios.post("/password/email", { email });
+  return async (dispatch: CallableFunction) => {
+    try {
+      const res = await axios.post("/password/email", { email });
 
-            // Behaviour on success.
-            if (res.status === 200) {
-                return {
-                    success: res.data.message,
-                    error: "",
-                };
-            }
-        } catch (error) {
-            // Return an error message if the email was not found in the DB.
-            if (error.response.status === 422) {
-                dispatch({
-                    type: types.AUTH_GENERAL_ERROR,
-                });
-                return {
-                    success: "",
-                    error: "Seems like there is no account for that email.",
-                };
-            }
-        }
-    };
+      // Behaviour on success.
+      if (res.status === 200) {
+        return {
+          success: res.data.message,
+          error: "",
+        };
+      }
+    } catch (error) {
+      // Return an error message if the email was not found in the DB.
+      if (error.response.status === 422) {
+        dispatch({
+          type: types.AUTH_GENERAL_ERROR,
+        });
+        return {
+          success: "",
+          error: "Seems like there is no account for that email.",
+        };
+      }
+    }
+  };
 };
 
 /**
@@ -231,40 +231,40 @@ export const forgotPassword = (email: string) => {
  * @return {object}
  */
 export const resetPassword = (email, password, token) => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            const res = await axios.post("/password/reset", {
-                email,
-                password,
-                token,
-            });
+  return async (dispatch: CallableFunction) => {
+    try {
+      const res = await axios.post("/password/reset", {
+        email,
+        password,
+        token,
+      });
 
-            // Behaviour on success.
-            if (res.status === 200) {
-                return {
-                    success: res.data.message,
-                    error: "",
-                };
-                /**
-                 * No need to dispatch an action here as
-                 * the user will be redirected, which will trigger
-                 * the LOAD_USER actions anyways.
-                 */
-            }
-            return {
-                success: "",
-                error: "The given data was invalid",
-            };
-        } catch (error) {
-            dispatch({
-                type: types.AUTH_GENERAL_ERROR,
-            });
-            return {
-                success: "",
-                error: "The given data is invalid.",
-            };
-        }
-    };
+      // Behaviour on success.
+      if (res.status === 200) {
+        return {
+          success: res.data.message,
+          error: "",
+        };
+        /**
+         * No need to dispatch an action here as
+         * the user will be redirected, which will trigger
+         * the LOAD_USER actions anyways.
+         */
+      }
+      return {
+        success: "",
+        error: "The given data was invalid",
+      };
+    } catch (error) {
+      dispatch({
+        type: types.AUTH_GENERAL_ERROR,
+      });
+      return {
+        success: "",
+        error: "The given data is invalid.",
+      };
+    }
+  };
 };
 
 /**
@@ -283,43 +283,43 @@ export const resetPassword = (email, password, token) => {
  *   Includes success and error keys. Their values will be set depending on verification outcome.
  */
 export const verifyEmail = (userID, hash, expires, signature) => {
-    return async (dispatch: CallableFunction) => {
-        try {
-            /**
-             * Construct the url the api expects.
-             * It must be /email/verify/USERID/HASH?expires=EXPIRES&signature=SIGNATURE
-             */
-            const requestURL = `/email/verify/${userID}/${hash}?expires=${expires}&signature=${signature}`;
+  return async (dispatch: CallableFunction) => {
+    try {
+      /**
+       * Construct the url the api expects.
+       * It must be /email/verify/USERID/HASH?expires=EXPIRES&signature=SIGNATURE
+       */
+      const requestURL = `/email/verify/${userID}/${hash}?expires=${expires}&signature=${signature}`;
 
-            // Send req to api.
-            const res = await axios.get(requestURL);
+      // Send req to api.
+      const res = await axios.get(requestURL);
 
-            // Success.
-            if (res.status === 204) {
-                return {
-                    success: true,
-                    error: "",
-                };
-            }
-            // Error.
-            else {
-                return {
-                    success: false,
-                    error: "Something went wrong",
-                };
-            }
-        } catch (error) {
-            if (error.response && error.response.data) {
-                return {
-                    success: false,
-                    error: error.response.data.message,
-                };
-            } else {
-                return {
-                    success: false,
-                    error: "Sorry, something went wrong.",
-                };
-            }
-        }
-    };
+      // Success.
+      if (res.status === 204) {
+        return {
+          success: true,
+          error: "",
+        };
+      }
+      // Error.
+      else {
+        return {
+          success: false,
+          error: "Something went wrong",
+        };
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return {
+          success: false,
+          error: error.response.data.message,
+        };
+      } else {
+        return {
+          success: false,
+          error: "Sorry, something went wrong.",
+        };
+      }
+    }
+  };
 };
