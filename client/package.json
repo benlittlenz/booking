@@ -9,7 +9,9 @@
     "lint": "eslint --fix ."
   },
   "dependencies": {
+    "@headlessui/react": "^0.0.0-dev.50d9fd3",
     "axios": "^0.21.1",
+    "clsx": "^1.1.1",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "next": "^11.0.1",
     "prop-types": "^15.7.2",

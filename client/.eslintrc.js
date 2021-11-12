@@ -1,46 +1,45 @@
 module.exports = {
-    env: {
-        browser: true,
-        es2021: true,
+  env: {
+    browser: true,
+    es6: true,
+    amd: true,
+    node: true,
+  },
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+  ],
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
+  },
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    extends: ["airbnb", "prettier"],
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true,
+    ecmaVersion: 11,
+    sourceType: "module",
+  },
+  plugins: ["react", "@typescript-eslint", "simple-import-sort"],
+  rules: {
+    "no-unused-vars": "off",
+    "react/react-in-jsx-scope": "off",
+
+  },
+  settings: {
+    settings: {
+      "import/resolver": {
+        alias: {
+          map: [
+            ["@/components", "./components"],
+            ["@/store", "./store"],
+            ["@/services", "./services"],
+          ],
+          extensions: [".js", ".jsx", ".ts", ".tsx"],
         },
-        ecmaVersion: 12,
-        sourceType: "module",
+      },
     },
-    plugins: ["prettier"],
-    rules: {
-        "no-nested-ternary": "off",
-        "no-unused-vars": "off",
-        "import/prefer-default-export": "off",
-        "react/react-in-jsx-scope": "off",
-        "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
-        "react/prop-types": "off",
-        "react/no-children-prop": "off",
-        "react/no-array-index-key": "off",
-        "react/jsx-props-no-spreading": "off",
-        camelcase: "off",
-        "jsx-a11y/anchor-is-valid": "off",
-        "jsx-a11y/label-has-associated-control": [
-            "error",
-            {
-                required: {
-                    some: ["nesting", "id"],
-                },
-            },
-        ],
-        "jsx-a11y/label-has-for": [
-            2,
-            {
-                components: ["Label"],
-                required: {
-                    some: ["nesting", "id"],
-                },
-                allowChildren: false,
-            },
-        ],
-    },
+  },
 };
