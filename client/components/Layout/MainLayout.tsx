@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
-import { FolderIcon, HomeIcon, MenuAlt2Icon, XIcon } from "@heroicons/react/outline";
+import { FolderIcon, HomeIcon, MenuAlt2Icon, XIcon, ClockIcon, CalendarIcon, CogIcon, CollectionIcon} from "@heroicons/react/outline";
 
 type SideNavigationItem = {
   name: string;
@@ -12,8 +12,10 @@ type SideNavigationItem = {
 
 const SideNavigation = () => {
   const navigation = [
-    { name: "Dashboard", href: ".", icon: HomeIcon },
-    { name: "Discussions", href: "./discussions", icon: FolderIcon },
+    { name: "Events", href: "/events", icon: CollectionIcon },
+    { name: "Bookings", href: "/bookings", icon: CalendarIcon },
+    { name: "Availability", href: "/availability", icon: ClockIcon },
+    { name: "Settings", href: "/settings", icon: CogIcon },
   ].filter(Boolean) as SideNavigationItem[];
 
   return (
@@ -22,13 +24,13 @@ const SideNavigation = () => {
         <Link key={item.name} href={item.href}>
           <a
             className={clsx(
-              "text-gray-300 hover:bg-gray-700 hover:text-white",
+              "text-gray-800 hover:bg-white hover:bg-gray-50",
               "group flex items-center px-2 py-2 text-base font-medium rounded-md",
             )}
           >
             <item.icon
               className={clsx(
-                "text-gray-400 group-hover:text-gray-300",
+                "text-gray-400 group-hover:text-gray-600",
                 "mr-4 flex-shrink-0 h-6 w-6",
               )}
               aria-hidden="true"
@@ -131,7 +133,7 @@ const MobileSidebar = ({ sidebarOpen, setSidebarOpen }: MobileSidebarProps) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+          <Dialog.Overlay className="fixed inset-0 bg-white bg-opacity-75" />
         </Transition.Child>
         <Transition.Child
           as={React.Fragment}
@@ -142,7 +144,7 @@ const MobileSidebar = ({ sidebarOpen, setSidebarOpen }: MobileSidebarProps) => {
           leaveFrom="translate-x-0"
           leaveTo="-translate-x-full"
         >
-          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-gray-800">
+          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
             <Transition.Child
               as={React.Fragment}
               enter="ease-in-out duration-300"
@@ -181,13 +183,13 @@ const MobileSidebar = ({ sidebarOpen, setSidebarOpen }: MobileSidebarProps) => {
 const Sidebar = () => {
   return (
     <div className="hidden md:flex md:flex-shrink-0">
-      <div className="flex flex-col w-64">
+      <div className="flex flex-col w-56">
         <div className="flex flex-col h-0 flex-1">
           {/* <div className="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
             <Logo />
           </div> */}
           <div className="flex-1 flex flex-col overflow-y-auto">
-            <nav className="flex-1 px-2 py-4 bg-gray-800 space-y-1">
+            <nav className="flex-1 px-2 py-4 bg-white space-y-1">
               <SideNavigation />
             </nav>
           </div>
@@ -209,7 +211,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       <MobileSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <Sidebar />
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+        <div>
           <button
             className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
             onClick={() => setSidebarOpen(true)}
