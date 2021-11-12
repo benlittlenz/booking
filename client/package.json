@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^0.0.0-dev.50d9fd3",
+    "@hookform/resolvers": "^2.8.3",
     "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "eslint-plugin-simple-import-sort": "^7.0.0",
@@ -25,7 +26,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "tailwindcss": "^2.2.19",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "zod": "^3.11.6"
   },
   "devDependencies": {
     "@types/node": "^14.14.16",
