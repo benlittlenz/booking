@@ -19,6 +19,7 @@
     "dependencies": {
         "@headlessui/react": "^1.4.2",
         "@heroicons/react": "^1.0.5",
+        "@radix-ui/react-dropdown-menu": "^0.1.1",
         "eslint": "^8.2.0",
         "eslint-config-airbnb": "^19.0.0",
         "eslint-config-prettier": "^8.3.0",

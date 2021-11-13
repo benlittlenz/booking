@@ -1,8 +1,8 @@
 import * as React from "react";
 import Link from "next/link";
 import clsx from "clsx";
-import { Dialog, Transition } from "@headlessui/react";
-import { FolderIcon, HomeIcon, MenuAlt2Icon, XIcon, ClockIcon, CalendarIcon, CogIcon, CollectionIcon} from "@heroicons/react/outline";
+import { Dialog, Menu, Transition } from "@headlessui/react";
+import { UserIcon, MenuAlt2Icon, XIcon, ClockIcon, CalendarIcon, CogIcon, CollectionIcon} from "@heroicons/react/outline";
 
 type SideNavigationItem = {
   name: string;
@@ -49,65 +49,65 @@ type UserNavigationItem = {
   onClick?: () => void;
 };
 
-// const UserNavigation = () => {
-//   const userNavigation = [
-//     { name: "Your Profile", to: "./profile" },
-//     {
-//       name: "Sign out",
-//       to: "",
-//       onClick: () => {
-//         logout();
-//       },
-//     },
-//   ].filter(Boolean) as UserNavigationItem[];
+const UserNavigation = () => {
+  const userNavigation = [
+    { name: "Your Profile", to: "./profile" },
+    {
+      name: "Sign out",
+      to: "",
+      // onClick: () => {
+      //   logout();
+      // },
+    },
+  ].filter(Boolean) as UserNavigationItem[];
 
-//   return (
-//     <Menu as="div" className="ml-3 relative">
-//       {({ open }) => (
-//         <>
-//           <div>
-//             <Menu.Button className="max-w-xs  bg-gray-200 p-2 flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-//               <span className="sr-only">Open user menu</span>
-//               <UserIcon className="h-8 w-8 rounded-full" />
-//             </Menu.Button>
-//           </div>
-//           <Transition
-//             show={open}
-//             as={React.Fragment}
-//             enter="transition ease-out duration-100"
-//             enterFrom="transform opacity-0 scale-95"
-//             enterTo="transform opacity-100 scale-100"
-//             leave="transition ease-in duration-75"
-//             leaveFrom="transform opacity-100 scale-100"
-//             leaveTo="transform opacity-0 scale-95"
-//           >
-//             {/* <Menu.Items
-//               static
-//               className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-//             >
-//               {userNavigation.map((item) => (
-//                 <Menu.Item key={item.name}>
-//                   {({ active }) => (
-//                     <Link
-//                       onClick={item.onClick}
-//                       to={item.to}
-//                       className={clsx(
-//                         active ? "bg-gray-100" : "",
-//                         "block px-4 py-2 text-sm text-gray-700",
-//                       )}
-//                     >
-//                       {item.name}
-//                     </Link>
-//                   )}
-//                 </Menu.Item>
-//               ))}
-//             </Menu.Items> */}
-//           </Transition>
-//         </>
-//       )}
-//     </Menu>
-//   );
-// };
+  return (
+    <Menu as="div" className="ml-3 relative">
+      {({ open }) => (
+        <>
+          <div>
+            <Menu.Button className="max-w-xs  bg-gray-200 p-2 flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <span className="sr-only">Open user menu</span>
+              <UserIcon className="h-8 w-8 rounded-full" />
+            </Menu.Button>
+          </div>
+          <Transition
+            show={open}
+            as={React.Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
+          >
+            {/* <Menu.Items
+              static
+              className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              {userNavigation.map((item) => (
+                <Menu.Item key={item.name}>
+                  {({ active }) => (
+                    <Link
+                      onClick={item.onClick}
+                      to={item.to}
+                      className={clsx(
+                        active ? "bg-gray-100" : "",
+                        "block px-4 py-2 text-sm text-gray-700",
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </Menu.Item>
+              ))}
+            </Menu.Items> */}
+          </Transition>
+        </>
+      )}
+    </Menu>
+  );
+};
 
 type MobileSidebarProps = {
   sidebarOpen: boolean;
@@ -170,6 +170,7 @@ const MobileSidebar = ({ sidebarOpen, setSidebarOpen }: MobileSidebarProps) => {
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
               <nav className="px-2 space-y-1">
                 <SideNavigation />
+
               </nav>
             </div>
           </div>
@@ -184,14 +185,24 @@ const Sidebar = () => {
   return (
     <div className="hidden md:flex md:flex-shrink-0">
       <div className="flex flex-col w-56">
-        <div className="flex flex-col h-0 flex-1">
+        <div className="flex flex-col h-0 flex-1 border-r border-gray-200">
           {/* <div className="flex items-center h-16 flex-shrink-0 px-4 bg-gray-900">
             <Logo />
           </div> */}
           <div className="flex-1 flex flex-col overflow-y-auto">
-            <nav className="flex-1 px-2 py-4 bg-white space-y-1">
-              <SideNavigation />
-            </nav>
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+              <nav className="flex-1 px-2 py-4 bg-white space-y-1">
+                <SideNavigation />
+              </nav>
+            </div>
+            <div className="border-t border-gray-200 p-2">
+              <div className="flex items-center hover:bg-gray-100 px-1 py-2 rounded-sm cursor-pointer">
+                <CogIcon className="mr-4 flex-shrink-0 h-6 w-6 text-gray-500" aria-hidden="true" />
+                <span className="text-gray-800 font-medium text-sm hover:text-gray-900">
+                  Settings
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -207,7 +218,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="h-screen flex overflow-hidden bg-white">
       <MobileSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <Sidebar />
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
@@ -224,6 +235,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               <UserNavigation />
             </div>
           </div> */}
+
         </div>
         <main className="flex-1 relative overflow-y-auto focus:outline-none">{children}</main>
       </div>
