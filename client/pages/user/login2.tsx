@@ -1,8 +1,9 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import * as z from "zod";
 import { login } from "@/store/auth/authActions";
 import { UserValidator } from "@/services/UserValidator";
+import { Form, InputField } from "@/components/Form";
 import { Card } from "@/components/Card/Card";
 import { TextInput } from "@/components/Form/FormElement";
 import { H1 } from "@/components/Typography/Headers";
@@ -11,6 +12,20 @@ import { Alert } from "@/components/Alert/Alert";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SmallSpinner } from "@/components/Spinner/Spinner";
+
+const schema = z.object({
+  email: z.string().min(1, "Required"),
+  password: z.string().min(1, "Required"),
+});
+
+type LoginValues = {
+  email: string;
+  password: string;
+};
+
+type LoginFormProps = {
+  onSuccess: () => void;
+};
 
 const Login = (props: any): ReactElement => {
   /**
@@ -85,64 +100,42 @@ const Login = (props: any): ReactElement => {
 
   // Return statement.
   return (
-    <div className="w-screen h-screen relative">
-      <div className="absolute w-full md:w-3/5 lg:w-1/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <Card
-          additionalInnerClasses="justify-center items-center"
-          additionalWrapperClasses="bg-gray-100"
-        >
+    <div>
+      <Form<LoginValues, typeof schema>
+        onSubmit={async (values) => {
+          console.log('VALUES >> ', values)
+          // props.login()
+        }}
+        schema={schema}
+      >
+        {({ register, formState }) => (
           <>
-            {props.loginError && <Alert type="danger">{props.loginError}</Alert>}
-            {/* The main Header */}
-            <H1 withMargin={true} center={true}>
-              Login
-            </H1>
-
-            {/* Email */}
-            <TextInput
-              type="text"
-              value={formData.email}
-              placeholder="Your email address..."
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
-              name="email"
-              errorMsg={formData.emailError}
+            <InputField
+              type="email"
+              label="Email Address"
+              error={formState.errors["email"]}
+              registration={register("email")}
             />
-
-            {/* Password */}
-            <TextInput
+            <InputField
               type="password"
-              value={formData.password}
-              placeholder="Your password..."
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
-              name="password"
-              errorMsg={formData.passwordError}
+              label="Password"
+              error={formState.errors["password"]}
+              registration={register("password")}
             />
-
-            {/* Submit Button */}
-            <PrimaryButton
-              onClick={() => {
-                submit();
-              }}
-            >
-              <SmallSpinner show={props.loading} />
-              Login
-            </PrimaryButton>
-
-            {/* Additional links. */}
-            <div className="w-full flex justify-between mt-3 text-blue-500">
-              <Link href="/user/register">
-                <a className="text-xs underline">No Account yet?</a>
-              </Link>
-              <Link href="/user/password/forgot">
-                <a className="text-xs underline">Forgot password?</a>
-              </Link>
+            <div>
+              {/* <Button isLoading={isLoggingIn} type="submit" className="w-full">
+                Log in
+              </Button> */}
             </div>
           </>
-        </Card>
+        )}
+      </Form>
+      <div className="mt-2 flex items-center justify-end">
+        <div className="text-sm">
+          <Link href="../register">
+            <a className="font-medium text-blue-600 hover:text-blue-500">Register</a>
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -154,11 +147,5 @@ const mapStateToProps = (state: any) => ({
   loginError: state.auth.loginError,
   loading: state.auth.loginLoading,
 });
-
-// Define PropTypes.
-Login.propTypes = {
-  props: PropTypes.object,
-  login: PropTypes.func,
-};
 
 export default connect(mapStateToProps, { login })(Login);
