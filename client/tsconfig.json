@@ -20,6 +20,6 @@
       "@/store/*": ["store/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Layout/UserDropdown.tsx"],
   "exclude": ["node_modules"]
 }

@@ -3,6 +3,12 @@ import Link from "next/link";
 import clsx from "clsx";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import { UserIcon, MenuAlt2Icon, XIcon, ClockIcon, CalendarIcon, CogIcon, CollectionIcon} from "@heroicons/react/outline";
+import Dropdown, {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../Elements/Dropdown/Dropdown";
 
 type SideNavigationItem = {
   name: string;
@@ -39,6 +45,7 @@ const SideNavigation = () => {
           </a>
         </Link>
       ))}
+      {/* <UserDropdown /> */}
     </>
   );
 };
@@ -195,14 +202,7 @@ const Sidebar = () => {
                 <SideNavigation />
               </nav>
             </div>
-            <div className="border-t border-gray-200 p-2">
-              <div className="flex items-center hover:bg-gray-100 px-1 py-2 rounded-sm cursor-pointer">
-                <CogIcon className="mr-4 flex-shrink-0 h-6 w-6 text-gray-500" aria-hidden="true" />
-                <span className="text-gray-800 font-medium text-sm hover:text-gray-900">
-                  Settings
-                </span>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
@@ -242,3 +242,30 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
     </div>
   );
 };
+
+const UserDropdown = () => {
+  return (
+    <Dropdown>
+      <DropdownMenuTrigger asChild>
+        <div className="border-t border-gray-200 p-2">
+          <div className="flex items-center hover:bg-gray-100 px-1 py-2 rounded-sm cursor-pointer">
+            <CogIcon className="mr-4 flex-shrink-0 h-6 w-6 text-gray-500" aria-hidden="true" />
+            <span className="text-gray-800 font-medium text-sm hover:text-gray-900">Settings</span>
+          </div>
+        </div>
+      </DropdownMenuTrigger>
+      {/* <DropdownMenuContent>
+        <DropdownMenuSeparator className="h-px bg-gray-200" />
+        <DropdownMenuItem>
+          <a
+            // onClick={() => signOut({ callbackUrl: "/auth/logout" })}
+            className="flex px-4 py-2 text-sm cursor-pointer hover:bg-gray-100 hover:text-gray-900"
+          >
+
+            Sign Out
+          </a>
+        </DropdownMenuItem>
+      </DropdownMenuContent> */}
+    </Dropdown>
+  );
+}
