@@ -1,148 +1,90 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
+import * as z from "zod";
 import { login } from "@/store/auth/authActions";
-import { UserValidator } from "@/services/UserValidator";
-import { Card } from "@/components/Card/Card";
-import { TextInput } from "@/components/Form/FormElement";
-import { H1 } from "@/components/Typography/Headers";
-import { PrimaryButton } from "@/components/Button/Button";
-import { Alert } from "@/components/Alert/Alert";
+import { Button } from "@/components/Elements";
+import { Form, InputField } from "@/components/Form";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { SmallSpinner } from "@/components/Spinner/Spinner";
 
-const Login = (props: any): ReactElement => {
-  /**
-   * The state.
-   */
-  const [formData, setFormData] = useState<{
-    email: string;
-    password: string;
-    emailError: string;
-    passwordError: string;
-  }>({
-    email: "",
-    password: "",
-    emailError: "",
-    passwordError: "",
-  });
+const schema = z.object({
+  email: z.string().min(1, "Required"),
+  password: z.string().min(1, "Required"),
+});
 
+type LoginValues = {
+  email: string;
+  password: string;
+};
+
+type LoginFormProps = {
+  isAuthenticated: boolean;
+  loading: boolean;
+  login: any;
+};
+
+const Login = (props: LoginFormProps): ReactElement => {
+  const { isAuthenticated, loading, login } = props;
+
+  console.log("PROPS >>", isAuthenticated, loading);
   // The router object used for redirecting after login.
   const router = useRouter();
 
   // Redirect to user home route if user is authenticated.
   useEffect(() => {
-    if (props.isAuthenticated && !props.loading) {
+    if (isAuthenticated && !loading) {
       router.push(process.env.NEXT_PUBLIC_USER_HOME_ROUTE);
     }
-  }, [props.isAuthenticated, props.loading]);
+  }, [isAuthenticated, loading]);
 
-  /**
-   * Handle input change.
-   *
-   * @param {object} e
-   *   The event object.
-   */
-  const handleInputChange = (e: React.FormEvent<HTMLInputElement>): void => {
-    setFormData({
-      ...formData,
-      [e.currentTarget.name]: e.currentTarget.value,
-      emailError: "",
-      passwordError: "",
-    });
-  };
-
-  /**
-   * Submit the form.
-   */
-  const submit = (): Promise<void> => {
-    const userValidator: UserValidator = new UserValidator();
-    const { email, password } = formData;
-
-    // Check for valid email address.
-    const isEmailValid: boolean = userValidator.validateEmail(email);
-    if (!isEmailValid) {
-      setFormData({
-        ...formData,
-        emailError: "Please provide a valid email address",
-      });
-      return;
-    }
-
-    // Check for valid password.
-    if (!password) {
-      setFormData({
-        ...formData,
-        passwordError: "Please provide a valid password",
-      });
-      return;
-    }
-
-    // Make API call if everything is fine.
-    props.login(email, password);
-  };
-
-  // Return statement.
   return (
-    <div className="w-screen h-screen relative">
-      <div className="absolute w-full md:w-3/5 lg:w-1/3 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <Card
-          additionalInnerClasses="justify-center items-center"
-          additionalWrapperClasses="bg-gray-100"
-        >
-          <>
-            {props.loginError && <Alert type="danger">{props.loginError}</Alert>}
-            {/* The main Header */}
-            <H1 withMargin={true} center={true}>
-              Login
-            </H1>
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex justify-center">
+        </div>
 
-            {/* Email */}
-            <TextInput
-              type="text"
-              value={formData.email}
-              placeholder="Your email address..."
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
-              name="email"
-              errorMsg={formData.emailError}
-            />
+        <h2 className="mt-3 text-center text-3xl font-extrabold text-gray-900">Login</h2>
+      </div>
 
-            {/* Password */}
-            <TextInput
-              type="password"
-              value={formData.password}
-              placeholder="Your password..."
-              onChange={(e) => {
-                handleInputChange(e);
-              }}
-              name="password"
-              errorMsg={formData.passwordError}
-            />
-
-            {/* Submit Button */}
-            <PrimaryButton
-              onClick={() => {
-                submit();
-              }}
-            >
-              <SmallSpinner show={props.loading} />
-              Login
-            </PrimaryButton>
-
-            {/* Additional links. */}
-            <div className="w-full flex justify-between mt-3 text-blue-500">
-              <Link href="/user/register">
-                <a className="text-xs underline">No Account yet?</a>
-              </Link>
-              <Link href="/user/password/forgot">
-                <a className="text-xs underline">Forgot password?</a>
-              </Link>
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <Form<LoginValues, typeof schema>
+            onSubmit={async (values: any) => {
+              console.log("VALUES >> ", values);
+              login(values.email, values.password);
+            }}
+            schema={schema}
+          >
+            {({ register, formState }) => (
+              <>
+                <InputField
+                  type="email"
+                  label="Email Address"
+                  error={formState.errors["email"]}
+                  registration={register("email")}
+                />
+                <InputField
+                  type="password"
+                  label="Password"
+                  error={formState.errors["password"]}
+                  registration={register("password")}
+                />
+                <div>
+                  <Button type="submit" className="w-full">
+                    Log in
+                  </Button>
+                </div>
+              </>
+            )}
+          </Form>
+          <div className="mt-2 flex items-center justify-end">
+            <div className="text-sm">
+              {/* <Link>
+            <a className="font-medium text-blue-600 hover:text-blue-500">Register</a>
+          </Link> */}
             </div>
-          </>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -154,11 +96,5 @@ const mapStateToProps = (state: any) => ({
   loginError: state.auth.loginError,
   loading: state.auth.loginLoading,
 });
-
-// Define PropTypes.
-Login.propTypes = {
-  props: PropTypes.object,
-  login: PropTypes.func,
-};
 
 export default connect(mapStateToProps, { login })(Login);
