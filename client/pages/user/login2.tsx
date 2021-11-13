@@ -3,15 +3,10 @@ import { connect } from "react-redux";
 import * as z from "zod";
 import { login } from "@/store/auth/authActions";
 import { UserValidator } from "@/services/UserValidator";
+import { Button } from "@/components/Elements";
 import { Form, InputField } from "@/components/Form";
-import { Card } from "@/components/Card/Card";
-import { TextInput } from "@/components/Form/FormElement";
-import { H1 } from "@/components/Typography/Headers";
-import { PrimaryButton } from "@/components/Button/Button";
-import { Alert } from "@/components/Alert/Alert";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { SmallSpinner } from "@/components/Spinner/Spinner";
 
 const schema = z.object({
   email: z.string().min(1, "Required"),

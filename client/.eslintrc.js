@@ -25,6 +25,7 @@ module.exports = {
   plugins: ["react", "@typescript-eslint", "simple-import-sort"],
   rules: {
     "no-unused-vars": "off",
+    "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
   },
   settings: {
