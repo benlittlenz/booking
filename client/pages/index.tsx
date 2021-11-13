@@ -23,8 +23,8 @@ export default function Home() {
             <Link href="https://github.com/NiclasTimmeDev/laravel-nextjs-starter">
               <a target="_blank">Documentation</a>
             </Link>
-            <Link href="/user/login">Login</Link>
-            <Link href="/user/register">Register</Link>
+            <Link href="/auth/login">Login</Link>
+            <Link href="/auth/register">Register</Link>
           </div>
         </div>
       </div>

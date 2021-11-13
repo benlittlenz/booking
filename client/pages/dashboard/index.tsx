@@ -10,7 +10,7 @@ function Dashboard(props: any): ReactElement {
 
   useEffect(() => {
     if (!props.isAuthenticated) {
-      router.push("/user/login");
+      router.push("/auth/login");
     }
   }, [props.isAuthenticated]);
 
@@ -18,7 +18,7 @@ function Dashboard(props: any): ReactElement {
   return (
     <>
       <div>Dashboard</div>
-      <Link href="/user/register">Register</Link>
+      <Link href="/auth/register">Register</Link>
       <PrimaryButton
         onClick={() => {
           props.logout();

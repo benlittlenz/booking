@@ -40,8 +40,7 @@ const Login = (props: LoginFormProps): ReactElement => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-        </div>
+        <div className="flex justify-center"></div>
 
         <h2 className="mt-3 text-center text-3xl font-extrabold text-gray-900">Login</h2>
       </div>
@@ -79,9 +78,9 @@ const Login = (props: LoginFormProps): ReactElement => {
           </Form>
           <div className="mt-2 flex items-center justify-end">
             <div className="text-sm">
-              {/* <Link>
-            <a className="font-medium text-blue-600 hover:text-blue-500">Register</a>
-          </Link> */}
+              <Link href="/auth/register">
+                <a className="font-medium text-blue-600 hover:text-blue-500">Register</a>
+              </Link>
             </div>
           </div>
         </div>
